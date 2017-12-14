@@ -11,7 +11,7 @@ router = DefaultRouter()
 
 urlpatterns = [
 
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^$', TemplateView.as_view(template_name="login.html")),
     url(r'^login/$', account_view.UserLoginView.as_view(), name='user-login'),
     url(r'^register/$', account_view.UserEmailRegisterView.as_view(), name='user-email-register'),
     # url(r'^logout/$', check_authorized(account_view.UserLogoutView.as_view()), name='user-logout'),
