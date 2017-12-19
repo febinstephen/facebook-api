@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.generics import GenericAPIView
 
 from applications.accounts.mixins import UserSocialRegisterMixin
@@ -22,17 +23,17 @@ class UserEmailRegisterView(APIView, ErrorType, UserSocialRegisterMixin):
     Performs User registration using email user filled profile details.
     """
 
+    renderer_classes = (TemplateHTMLRenderer,)
     serializer_class = UserEmailRegisterSerializer
 
     def post(self, request, format=None):
 
+        import ipdb; ipdb.set_trace();
+
         """
         Request Methods : [POST]
         ---
-
         serializer: applications.accounts.serializer.UserEmailRegisterSerializer
-
-
         """
         response = dict(status='success')
 
@@ -46,7 +47,7 @@ class UserEmailRegisterView(APIView, ErrorType, UserSocialRegisterMixin):
                 data = self.facebook_signup(request, access_token)
                 if 'error' in data.keys():
                     return Response(status=self.BAD_REQUEST ,data=data)
-                return Response(data=data)
+                return Response(data=data, template_name='index.html')
             elif request.data.get('provider') == 'google':
                 access_token = request.data.get('access_token')
                 account_exists, can_signup = self.validate_social_account(access_token=access_token, provider='google')
