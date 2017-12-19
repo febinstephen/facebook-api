@@ -15,7 +15,6 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="{% static 'js/facebook/app.js' %}"></script>
     <![endif]-->
   </head>
   <body class="login-bg">
@@ -45,7 +44,6 @@
 	                                    <img src="{% static 'images/facebook.png' %}" alt="fb">
 	                                </span>
 	                                <span class="text" id="loginBtn">Sign in with Facebook</span>
-									<div id="response"></div>
 
 	                            </a>
 	                            <div class="division">
@@ -76,6 +74,7 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'js/facebook/app.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
   </body>

@@ -1,18 +1,24 @@
 function getUserData() {
 	FB.api('/me', function(response) {
-		document.getElementById('response').innerHTML = 'Hello ' + response.name;
-
+//		document.getElementById('response').innerHTML = 'Hello ' + response.name;
+        var access_token =   FB.getAuthResponse()['accessToken'];
         <!--AJAX script to pass access-token recieved from facebook -->
+        var data = {
+             "access_token": access_token,
+             "fname": response.name,
+             "lname": response.name,
+             "email": 'godsonfebin@gmail.com',
+             "provider": 'facebook' }
 
         $.ajax({
-                data: { 'access_token': accessToken, 'provider': 'facebook' },
+                data: data,
                 url: 'http://127.0.0.1:8000/api/v1/register/',
                 type: 'post',
                 success: function (data) {
                     console.log("Success");
                     // Do something with the data
                 }
-        })
+        });
 
 	});
 }
@@ -32,6 +38,7 @@ window.fbAsyncInit = function() {
 			document.getElementById('loginBtn').style.display = 'none';
 			getUserData();
 		} else {
+		    console.log("not connected");
 			//user is not authorized
 		}
 	});

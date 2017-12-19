@@ -58,6 +58,7 @@ class UserEmailRegisterSerializer(serializers.Serializer):
         super(UserEmailRegisterSerializer, self).__init__(*args, **kwargs)
 
     def validate(self, data):
+
         has_provider = data.get('provider')
         password = data.get('password')
         email = data.get('email')

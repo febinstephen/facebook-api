@@ -50,45 +50,5 @@ class User(AbstractUser):
     def __unicode__(self):
         return self.get_username()
 
-
-# def mailchimp_subscribe_user(sender, instance, created, **kwargs):
-#     if created:
-#         send_user_register_email(instance)
-#         url = settings.MAILCHIMP_API_ENDPOINT+'lists/%s/members'%(settings.MAILCHIMP_LIST_ID)
-#         try:
-#             email = instance.email
-#             fname = instance.first_name
-#             lname = instance.last_name
-#
-#             data = {
-#                     "email_address": email,
-#                     "status": "subscribed",
-#                     "merge_fields": {
-#                         "FNAME": fname,
-#                         "LNAME": lname
-#                     }
-#                 }
-#             resp = requests.post(url, data=json.dumps(data), auth=(settings.MAILCHIMP_USERNAME, settings.MAILCHIMP_ACCESS_KEY))
-#         except Exception as e:
-#             print e
-#         generate_referral_id(instance)
-#
-# def mailchimp_delete_user(sender, instance, **kwargs):
-#
-#     try:
-#         email = instance.email
-#         m = hashlib.md5()
-#         m.update(email.encode('utf-8'))
-#         email_md5 = m.hexdigest()
-#         url = settings.MAILCHIMP_API_ENDPOINT+'lists/%s/members/%s/'%(settings.MAILCHIMP_LIST_ID, email_md5)
-#         resp = requests.delete(url, auth=(settings.MAILCHIMP_USERNAME, settings.MAILCHIMP_ACCESS_KEY))
-#
-#         a = PointData.objects.filter(user_id=instance.id).delete
-#     except Exception as e:
-#         print e
-#
-# post_save.connect(mailchimp_subscribe_user, sender=User)
-# post_delete.connect(mailchimp_delete_user, sender=User)
-#
 field = User._meta.get_field('username')
 field.max_length = 254
