@@ -34,7 +34,7 @@
 	                  <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
 	                    <ul class="nav navbar-nav">
 	                      <li class="dropdown">
-	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My account <b class="caret"></b></a>
 	                        <ul class="dropdown-menu animated fadeInUp">
 	                          <li><a href="profile.html">Profile</a></li>
 	                          <li><a href="login.html">Logout</a></li>
@@ -106,15 +106,17 @@
                                     <tbody>
 
                                         <tr>
-                                            <td># 2501</td>
-                                            <td>01/22/2015 </td>
+                                            <td>Facebook</td>
+                                            <td>{{ request.user }}</td>
                                             <td>
-                                                <label class="label label-info">300 USD </label>
+                                                <label class="label label-info">Bathery </label>
                                             </td>
                                             <td>
-                                                <label class="label label-success">Delivered</label></td>
+                                                <label class="label label-success">8547606101</label></td>
                                             <td>01/25/2015</td>
-                                             <td> <a href="#"  class="btn btn-xs btn-danger"  >View</a> </td>
+                                             <td> <a href="#"  class="btn btn-xs btn-danger">View</a> </td>
+                                             <td> <a href="#"  class="btn btn-xs btn-danger">View</a> </td>
+                                             <td> <a href="{% url 'profile-detail' accesstoken='ewew' %}"  class="btn btn-xs btn-danger">Update</a> </td>
                                         </tr>
                                         <tr>
                                             <td># 15091</td>

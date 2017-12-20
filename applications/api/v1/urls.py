@@ -11,13 +11,14 @@ router = DefaultRouter()
 
 urlpatterns = [
 
-    url(r'^$', TemplateView.as_view(template_name="login.html")),
-    url(r'^login/$', account_view.UserLoginView.as_view(), name='user-login'),
+    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^login/$', TemplateView.as_view(template_name="login.html"), name='user-login'),
+    # url(r'^login/$', account_view.UserLoginView.as_view(), name='user-login'),
     url(r'^register/$', account_view.UserEmailRegisterView.as_view(), name='user-email-register'),
     # url(r'^logout/$', check_authorized(account_view.UserLogoutView.as_view()), name='user-logout'),
     # url(r'^session-status/$', account_view.UserSessionStatusView.as_view(), name='user-session-status'),
     # url(r'^check-email/$', account_view.CheckEmailView.as_view(), name='check-email'),
-    # url(r'^account/$', check_authorized(account_view.UserProfileDetail.as_view()), name='user-profile'),
+    url(r'^account/(?P<accesstoken>\w+)/$', account_view.UpdateFbProfile.as_view(), name='profile-detail'),
     # url(r'^reset-password/$', account_view.PasswordResetView.as_view(), name='user-password-reset'),
     # url(r'^update-password/$', account_view.PasswordUpateView.as_view(), name='user-password-update'),
     url(r'^login/facebook/$', account_view.FacebookLoginOrSignup.as_view(), name='user-facebook-login-signup'),

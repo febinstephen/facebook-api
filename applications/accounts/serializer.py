@@ -376,3 +376,21 @@ class UserProfileUpdateV2Serializer(serializers.Serializer):
         instance.save()
 
 
+class FBProfileSerializer(serializers.Serializer):
+
+    """
+    Serializer for editing user profile details.
+    """
+
+    fname = serializers.CharField()
+    lname = serializers.CharField()
+    email = serializers.CharField()
+    phone = serializers.CharField()
+    address = serializers.CharField(required=False, allow_blank=True)
+
+    def update(self, instance, validated_data):
+        instance.first_name = validated_data['fname']
+        instance.last_name = validated_data['lname']
+        instance.email = validated_data['email']
+        instance.mobile = validated_data['phone']
+        instance.save()

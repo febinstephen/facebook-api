@@ -1,8 +1,9 @@
 # coding=utf-8
-import json
+import requests
 
 from django.contrib.auth import login, logout
 from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,7 +13,38 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from applications.accounts.mixins import UserSocialRegisterMixin
 from utils.helpers import ErrorType
 from applications.accounts.serializer import UserLoginSerializer, UserProfileSerializer,  UserEmailRegisterSerializer, \
-    UserProfileUpdateSerializer
+    UserProfileUpdateSerializer, FBProfileSerializer
+
+from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
+
+FB_GRAPH_API_USER_DATA_URL = 'https://graph.facebook.com/me?fields=id,name&access_token='
+
+
+class UpdateFbProfile(APIView, ErrorType):
+
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'profile_detail.html'
+
+    def get(self, request, accesstoken):
+        serializer = FBProfileSerializer()
+        return Response({'serializer': serializer})
+
+    def post(self, request, accesstoken):
+        serializer = FBProfileSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer})
+
+        request_data = request.data
+        keys = request_data.keys()
+
+        url = FB_GRAPH_API_USER_DATA_URL+accesstoken
+        resp = requests.get(url=url)
+        fb_user_data = resp.json()
+        request_user_data = {'first_name':request_data.get('fname'),'last_name':request_data.get('lname'),'email':request_data.get('email')}
+
+        valid = all(item in fb_user_data.items() for item in request_user_data.items())
+        serializer.save()
+        return redirect('profile-list')
 
 
 class UserEmailRegisterView(APIView, ErrorType, UserSocialRegisterMixin):
@@ -21,7 +53,8 @@ class UserEmailRegisterView(APIView, ErrorType, UserSocialRegisterMixin):
     Performs User registration using email user filled profile details.
     """
 
-    renderer_classes = (TemplateHTMLRenderer,)
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'index.html'
     serializer_class = UserEmailRegisterSerializer
 
     def post(self, request, format=None):
@@ -39,11 +72,11 @@ class UserEmailRegisterView(APIView, ErrorType, UserSocialRegisterMixin):
                 access_token = request.data.get('access_token')
                 account_exists, can_signup = self.validate_social_account(access_token=access_token, provider='facebook')
                 if account_exists:
-                    return Response(status=self.BAD_REQUEST ,data={"error":"Account already connected."})
+                    return Response(status=self.BAD_REQUEST, data={"error":"Account already connected."})
                 data = self.facebook_signup(request, access_token)
                 if 'error' in data.keys():
-                    return Response(status=self.BAD_REQUEST ,data=data)
-                return Response(data=data, template_name='index.html')
+                    return Response(status=self.BAD_REQUEST, data=data)
+                return Response(status=self.SUCCESS, data=data)
             elif request.data.get('provider') == 'google':
                 access_token = request.data.get('access_token')
                 account_exists, can_signup = self.validate_social_account(access_token=access_token, provider='google')
@@ -319,7 +352,7 @@ class FacebookLoginOrSignup(APIView, ErrorType, UserSocialRegisterMixin):
             return Response(status=self.CONFLICT)
 
         if 'error' in data.keys():
-            return Response(status=self.BAD_REQUEST ,data=data)
+            return Response(status=self.BAD_REQUEST, data=data)
         return Response(status=self.SUCCESS, data=data)
 
 

@@ -12,11 +12,12 @@ function getUserData() {
 
         $.ajax({
                 data: data,
-                url: 'http://127.0.0.1:8000/api/v1/register/',
+                url: 'http://localhost:8000/api/v1/register/',
                 type: 'post',
                 success: function (data) {
                     console.log("Success");
                     // Do something with the data
+                    window.location.href = 'http://localhost:8000/api/v1/';
                 }
         });
 
@@ -42,6 +43,7 @@ window.fbAsyncInit = function() {
 			//user is not authorized
 		}
 	});
+
 };
 
 //load the JavaScript SDK
