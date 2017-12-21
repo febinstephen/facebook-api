@@ -13,3 +13,4 @@ requests-oauthlib==0.6.0
 urllib3==1.14
 Pillow==4.2.1
 gunicorn>=19.7
+whitenoise==3.3.1
