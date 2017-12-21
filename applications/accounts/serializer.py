@@ -371,7 +371,6 @@ class UserProfileUpdateV2Serializer(serializers.Serializer):
         if validated_data.get('password'):
             instance.set_password(password)
         if validated_data.get('dob'):
-            print 'hereeeee'
             instance.dob = datetime.datetime.strptime(validated_data.get('dob'), "%d/%m/%Y").date()
         instance.save()
 
