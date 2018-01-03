@@ -18,6 +18,7 @@ from applications.accounts.serializer import UserLoginSerializer, UserProfileSer
 from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp, SocialAccount
 
 FB_GRAPH_API_USER_DATA_URL = 'https://graph.facebook.com/me?fields=id,name&access_token='
+FB_GRAPH_API_USER_PAGE_URL = 'https://graph.facebook.com/902243799945542/feed?message='
 
 
 class UpdateFbProfile(APIView, ErrorType):
@@ -25,11 +26,12 @@ class UpdateFbProfile(APIView, ErrorType):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'profile_detail.html'
 
-    def get(self, request, accesstoken):
+    def get(self, request):
         serializer = FBProfileSerializer()
         return Response({'serializer': serializer})
 
-    def post(self, request, accesstoken):
+    def post(self, request):
+        import ipdb; ipdb.set_trace();
         serializer = FBProfileSerializer(data=request.data)
         if not serializer.is_valid():
             return Response({'serializer': serializer})
@@ -37,12 +39,22 @@ class UpdateFbProfile(APIView, ErrorType):
         request_data = request.data
         keys = request_data.keys()
 
-        url = FB_GRAPH_API_USER_DATA_URL+accesstoken
-        resp = requests.get(url=url)
-        fb_user_data = resp.json()
-        request_user_data = {'first_name':request_data.get('fname'),'last_name':request_data.get('lname'),'email':request_data.get('email')}
+        token = SocialToken.objects.filter(account__user=request.user)
 
-        valid = all(item in fb_user_data.items() for item in request_user_data.items())
+        #TODO post a message to the page
+
+        request_user_data = {'message': request_data.get('message')}
+        # https: // www.facebook.com / Vellithira - 902243799945542 / posts /
+        url = FB_GRAPH_API_USER_PAGE_URL + "Hello World!!"
+        resp = requests.post(url=url)
+        fb_response = resp.json()
+
+        # url = FB_GRAPH_API_USER_DATA_URL+token
+        # resp = requests.get(url=url)
+        # fb_user_data = resp.json()
+        # request_user_data = {'first_name':request_data.get('fname'),'last_name':request_data.get('lname'),'email':request_data.get('email')}
+
+        # valid = all(item in fb_user_data.items() for item in request_user_data.items())
         serializer.save()
         return redirect('profile-list')
 

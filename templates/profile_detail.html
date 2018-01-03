@@ -78,7 +78,7 @@
                 <div class="col-md-12 panel-warning">
                     <div class="row">
                         <div class="col-md-12 panel-warning">
-                            <form action="{% url 'profile-detail'  accesstoken=access_token %}" method="POST">
+                            <form action="{% url 'profile-detail' %}" method="POST">
                                 {% csrf_token %}
                                 {% render_form serializer %}
                                 <input class="btn btn-xs btn-danger" type="submit" value="Save">
